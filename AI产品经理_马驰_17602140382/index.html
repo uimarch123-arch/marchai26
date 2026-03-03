@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>马驰 — AI Product Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: #0a0a0a;
+            color: #fafafa;
+            overflow-x: hidden;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .glass-card-hover:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(50, 240, 140, 0.3);
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(50, 240, 140, 0.15);
+        }
+
+        .photo-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+
+        .photo-3d:hover {
+            transform: rotateY(-5deg) rotateX(5deg) scale(1.02);
+        }
+
+        .bg-grid {
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 10s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* 鼠标跟随光效 */
+        .cursor-glow {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(50, 240, 140, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s;
+        }
+
+        /* 全局hover增强 */
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 链接hover效果 */
+        a {
+            position: relative;
+        }
+        a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: linear-gradient(90deg, #32F08C, #22d3ee);
+            transition: width 0.3s ease;
+        }
+        a:hover::after {
+            width: 100%;
+        }
+
+        /* 技能标签hover增强 */
+        .skill-tag {
+            transition: all 0.3s ease;
+        }
+        .skill-tag:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(50, 240, 140, 0.3);
+        }
+
+        .hero-title {
+            font-size: 10rem;
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 5rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 4rem;
+            }
+        }
+
+        /* 科技感动画标签 - 绿色配色 */
+        .tech-tag {
+            position: relative;
+            background: rgba(50, 240, 140, 0.08);
+            border: 1px solid rgba(50, 240, 140, 0.25);
+            color: #32F08C;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .tech-tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(50, 240, 140, 0.15), transparent);
+            transition: left 0.5s;
+        }
+        
+        .tech-tag:hover::before {
+            left: 100%;
+        }
+        
+        .tech-tag:hover {
+            background: rgba(50, 240, 140, 0.12);
+            border-color: rgba(50, 240, 140, 0.4);
+            box-shadow: 0 0 15px rgba(50, 240, 140, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 苹果风悬浮提示框 */
+        .contact-tooltip {
+            position: absolute;
+            bottom: calc(100% + 16px);
+            left: 50%;
+            transform: translateX(-50%) scale(0.95);
+            background: rgba(30, 30, 30, 0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 20px;
+            min-width: 280px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            z-index: 100;
+        }
+
+        .contact-tooltip::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            width: 12px;
+            height: 12px;
+            background: rgba(30, 30, 30, 0.85);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .contact-trigger:hover .contact-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) scale(1);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+
+        .contact-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .contact-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .contact-value {
+            font-size: 14px;
+            color: #fff;
+            font-weight: 500;
+            word-break: break-all;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        /* 时间线样式修复 */
+        .timeline-container {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, rgba(50, 240, 140, 0.5), rgba(50, 240, 140, 0.1));
+        }
+
+        .timeline-item {
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            transform: translateX(8px);
+        }
+
+        .timeline-item:hover h4 {
+            color: #32F08C;
+        }
+
+        .btn-glow {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(135deg, #32F08C, #22d3ee, #32F08C);
+            border-radius: inherit;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .btn-glow:hover::before {
+            opacity: 1;
+        }
+
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .project-detail-list li {
+            position: relative;
+            padding-left: 16px;
+            margin-bottom: 8px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .project-detail-list li::before {
+            content: '›';
+            position: absolute;
+            left: 0;
+            color: #32F08C;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-[#32F08C]/30 selection:text-white">
+    <!-- 鼠标跟随光效 -->
+    <div id="cursor-glow" class="cursor-glow"></div>
+
+    <!-- 背景 -->
+    <div class="fixed inset-0 z-0 pointer-events-none">
+        <canvas id="particles-canvas" class="absolute inset-0 w-full h-full"></canvas>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#0a0a0a]/50 to-[#0a0a0a]"></div>
+    </div>
+
+    <!-- 导航 -->
+    <nav class="fixed top-0 w-full z-50 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-md">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="#" class="text-xl font-bold tracking-tight text-white transition-colors" style="transition: color 0.3s;" onmouseover="this.style.color='#32F08C'" onmouseout="this.style.color='white'">
+                马驰
+            </a>
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
+                <a href="#about" class="hover:text-white transition-colors">关于</a>
+                <a href="#experience" class="hover:text-white transition-colors">经历</a>
+                <a href="#projects" class="hover:text-white transition-colors">项目</a>
+                <a href="#contact" class="px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 text-white border border-white/10 transition-all">
+                    联系我
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="relative z-10 min-h-screen flex items-center pt-20 pb-32 overflow-hidden">
+        <div class="max-w-6xl mx-auto px-6 w-full">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- 左侧 -->
+                <div class="space-y-6 fade-in-up">
+                    
+                    <h1 class="hero-title font-bold tracking-tighter text-gradient">
+                        马驰
+                    </h1>
+
+                    <p class="text-2xl md:text-3xl text-white font-medium leading-relaxed max-w-lg">
+                        AI Product Manager
+                    </p>
+
+                    <!-- 标签组 -->
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <span class="tech-tag px-4 py-2 rounded-full text-sm font-medium">0-1产品创新</span>
+                        <span class="tech-tag px-4 py-2 rounded-full text-sm font-medium">vibe coding</span>
+                        <span class="tech-tag px-4 py-2 rounded-full text-sm font-medium">数据驱动</span>
+                        <span class="tech-tag px-4 py-2 rounded-full text-sm font-medium">全链路落地</span>
+                    </div>
+
+                    <div class="space-y-3 text-lg pt-4">
+                        <p class="text-gray-400 leading-relaxed max-w-lg">
+                            <span class="text-white font-semibold">3年AI产品经验+6年互联网经验</span>
+                        </p>
+                        <p class="text-gray-500 leading-relaxed max-w-lg">
+                            服务过阿里巴巴、华住集团、极氪汽车、百安居等公司
+                        </p>
+                    </div>
+
+                    <div class="flex flex-wrap gap-4 pt-4">
+                        <!-- 联系我按钮 -->
+                        <div class="contact-trigger relative inline-block">
+                            <button class="btn-glow px-8 py-4 rounded-full bg-white text-black font-semibold hover:scale-105 transition-transform flex items-center gap-2">
+                                联系我 <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </button>
+                            
+                            <div class="contact-tooltip">
+                                <div class="contact-item">
+                                    <div class="contact-icon">
+                                        <i data-lucide="phone" class="w-4 h-4" style="color: #32F08C;"></i>
+                                    </div>
+                                    <div>
+                                        <div class="contact-label">电话</div>
+                                        <div class="contact-value">17602140382</div>
+                                    </div>
+                                </div>
+                                <div class="contact-item">
+                                    <div class="contact-icon">
+                                        <i data-lucide="mail" class="w-4 h-4" style="color: #32F08C;"></i>
+                                    </div>
+                                    <div>
+                                        <div class="contact-label">邮箱</div>
+                                        <div class="contact-value">512560971@qq.com</div>
+                                    </div>
+                                </div>
+                                <div class="contact-item">
+                                    <div class="contact-icon">
+                                        <i data-lucide="message-circle" class="w-4 h-4" style="color: #32F08C;"></i>
+                                    </div>
+                                    <div>
+                                        <div class="contact-label">微信</div>
+                                        <div class="contact-value">March00912</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href="#connect" class="px-8 py-4 rounded-full bg-white/5 text-white font-semibold border border-white/10 hover:bg-white/10 transition-all">
+                            查看作品
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 右侧照片 -->
+                <div class="relative fade-in-up" style="animation-delay: 0.2s;">
+                    <div class="relative w-full aspect-[4/5] max-w-md mx-auto photo-3d">
+                        <div class="absolute inset-0 bg-gradient-to-br rounded-3xl blur-3xl" style="background: linear-gradient(135deg, rgba(50, 240, 140, 0.3), rgba(34, 211, 238, 0.3));"></div>
+                        
+                        <div class="relative h-full rounded-3xl overflow-hidden border border-white/10 glass-card">
+                            <img src="切图素材/00.png" alt="马驰" class="w-full h-full object-cover object-top">
+                            
+                            <div class="absolute bottom-0 left-0 right-0 glass-card rounded-b-3xl p-4 flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                                    <i data-lucide="map-pin" class="w-5 h-5" style="color: #32F08C;"></i>
+                                </div>
+                                <div>
+                                    <div class="text-lg font-bold text-white">中国-上海</div>
+                                    <div class="text-xs text-gray-400">Available for opportunities</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 社交媒体 & 创意项目 -->
+    <section id="connect" class="relative z-10 py-32 border-t border-white/5">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="mb-16 fade-in-up">
+                <h2 class="text-sm font-semibold tracking-wider uppercase mb-4" style="color: #32F08C;">Connect & Create</h2>
+                <h3 class="text-4xl md:text-5xl font-bold tracking-tight text-gradient mb-4">关注我 & 创意项目</h3>
+                <p class="text-white/80 text-lg">欢迎关注我的频道</p>
+            </div>
+
+            <!-- 二维码区域 -->
+            <div class="grid md:grid-cols-3 gap-8 mb-20 fade-in-up">
+                <!-- 抖音 -->
+                <div class="glass-card rounded-3xl p-8 text-center hover-lift group">
+                    <div class="w-48 h-48 mx-auto mb-6 rounded-2xl overflow-hidden border-2 border-white/10 group-hover:border-[#32F08C]/50 transition-all">
+                        <img src="切图素材/抖音二维码.JPG" alt="抖音二维码" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-2">抖音</h4>
+                    <div class="mt-4 flex items-center justify-center gap-2 text-[#32F08C]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg>
+                        <span class="text-sm font-medium">AI方案落地分享</span>
+                    </div>
+                </div>
+
+                <!-- 视频号 -->
+                <div class="glass-card rounded-3xl p-8 text-center hover-lift group">
+                    <div class="w-48 h-48 mx-auto mb-6 rounded-2xl overflow-hidden border-2 border-white/10 group-hover:border-[#32F08C]/50 transition-all">
+                        <img src="切图素材/视频号二维码.JPG" alt="视频号二维码" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-2">视频号</h4>
+                    <div class="mt-4 flex items-center justify-center gap-2 text-[#32F08C]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+                        <span class="text-sm font-medium">持续更新中</span>
+                    </div>
+                </div>
+
+                <!-- 公众号 -->
+                <div class="glass-card rounded-3xl p-8 text-center hover-lift group">
+                    <div class="w-48 h-48 mx-auto mb-6 rounded-2xl overflow-hidden border-2 border-white/10 group-hover:border-[#32F08C]/50 transition-all">
+                        <img src="切图素材/公众号二维码.JPG" alt="公众号二维码" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-2">公众号</h4>
+                    <div class="mt-4 flex items-center justify-center gap-2 text-[#32F08C]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                        <span class="text-sm font-medium">原创干货</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 创意项目区域 -->
+            <div class="mb-12 fade-in-up">
+                <h4 class="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(50, 240, 140, 0.1);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#32F08C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    </span>
+                    创意项目
+                </h4>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 fade-in-up">
+                <!-- 木鱼桌宠 -->
+                <a href="https://cdlfsoekf1.feishu.cn/wiki/RXmnwTYkTiaXuIk32ETcKuxsnjJ?from=from_copylink" target="_blank" class="glass-card rounded-3xl overflow-hidden glass-card-hover transition-all duration-500 group block">
+                    <div class="aspect-video relative overflow-hidden">
+                        <img src="切图素材/木鱼桌宠.png" alt="木鱼桌宠" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold border" style="background: rgba(50, 240, 140, 0.2); color: #32F08C; border-color: rgba(50, 240, 140, 0.3);">AI桌面小游戏</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h5 class="text-xl font-bold text-white mb-2">木鱼桌宠</h5>
+                        <p class="text-white/70 text-sm leading-relaxed mb-4">
+                            一款治愈系微信小游戏，电子木鱼+桌面宠物结合。点击木鱼获得功德，解锁不同皮肤和音效，让工作间隙充满禅意。
+                        </p>
+                        <div class="flex items-center gap-4 text-sm text-white/50">
+                            <span class="flex items-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                治愈解压
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+                                即点即玩
+                            </span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- 像素风GIF生成器 -->
+                <a href="https://cdlfsoekf1.feishu.cn/wiki/DLGewtf3ciM0MvkweIJc8xUVnud?from=from_copylink" target="_blank" class="glass-card rounded-3xl overflow-hidden glass-card-hover transition-all duration-500 group block">
+                    <div class="aspect-video relative overflow-hidden">
+                        <img src="切图素材/像素风gif生成器.png" alt="像素风GIF生成器" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold border" style="background: rgba(34, 211, 238, 0.2); color: #22d3ee; border-color: rgba(34, 211, 238, 0.3);">AI工具</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h5 class="text-xl font-bold text-white mb-2">像素风GIF生成器</h5>
+                        <p class="text-white/70 text-sm leading-relaxed mb-4">
+                            基于AI的像素风格动图生成工具，输入文字描述即可生成复古像素风格的GIF动画，支持多种像素密度和调色板选择。
+                        </p>
+                        <div class="flex items-center gap-4 text-sm text-white/50">
+                            <span class="flex items-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                                AI驱动
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                一键导出
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About - 文字排版个人优势 -->
+    <section id="about" class="relative z-10 py-32 border-t border-white/5">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="mb-16 fade-in-up">
+                <h2 class="text-sm font-semibold tracking-wider uppercase mb-4" style="color: #32F08C;">About Me</h2>
+                <h3 class="text-4xl md:text-5xl font-bold tracking-tight text-gradient mb-12">个人优势</h3>
+            </div>
+
+            <div class="space-y-12 fade-in-up">
+                <div class="group">
+                    <h4 class="text-3xl font-semibold text-white mb-3 flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-lg flex items-center justify-center text-sm" style="background: rgba(50, 240, 140, 0.1); color: #32F08C;">01</span>
+                        全链路AI产品能力
+                    </h4>
+                    <p class="text-white/80 leading-relaxed pl-11">
+                        3年AI产品经理+6年互联网软件开发经验，具备POC验证、技术落地、用户体验、数据增长的完整闭环能力。深度理解从需求洞察到产品上线的全流程，能够独立完成产品规划、原型设计、数据埋点、效果评估等环节。
+                    </p>
+                </div>
+
+                <div class="group">
+                    <h4 class="text-3xl font-semibold text-white mb-3 flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-lg flex items-center justify-center text-sm" style="background: rgba(50, 240, 140, 0.1); color: #32F08C;">02</span>
+                        0-1 产品创新能力
+                    </h4>
+                    <p class="text-white/80 leading-relaxed pl-11">
+                        具备VibeCoding能力，主导智能体构建平台（Agent Builder）从0到1建设。熟悉数据治理、模型训练(SFT/RAG)、上下文工程、Agent架构设计、MCP协议、Agent Skills及ClawBot等前沿AI工程化流程，能够快速将技术能力转化为产品价值。
+                    </p>
+                </div>
+
+                <div class="group">
+                    <h4 class="text-3xl font-semibold text-white mb-3 flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-lg flex items-center justify-center text-sm" style="background: rgba(50, 240, 140, 0.1); color: #32F08C;">03</span>
+                        产品战略规划
+                    </h4>
+                    <p class="text-white/80 leading-relaxed pl-11">
+                        深度参与极氪AI to B战略落地蓝图（184体系：1个角色+8个步骤+4个保障）共建。具备从战略解码到战术执行的全局视野，能够将企业级战略拆解为可落地的功能模块，并推动跨部门协同实现目标。
+                    </p>
+                </div>
+
+                <div class="group">
+                    <h4 class="text-3xl font-semibold text-white mb-3 flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-lg flex items-center justify-center text-sm" style="background: rgba(50, 240, 140, 0.1); color: #32F08C;">04</span>
+                        数据驱动产品迭代
+                    </h4>
+                    <p class="text-white/80 leading-relaxed pl-11">
+                        擅长构建指标体系（评测规则、用户原声收集、数据埋点等）进行产品质量把控。通过建立科学的评估框架和自动化监控看板，实现产品的持续优化和精准迭代，确保产品体验与业务目标的达成。
+                    </p>
+                </div>
+
+                <div class="group">
+                    <h4 class="text-3xl font-semibold text-white mb-3 flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-lg flex items-center justify-center text-sm" style="background: rgba(50, 240, 140, 0.1); color: #32F08C;">05</span>
+                        自媒体运营经验
+                    </h4>
+                    <p class="text-white/80 leading-relaxed pl-11">
+                        主理公众号、抖音、B站等平台，IP定位AI落地方案方向，全网粉丝5W+。具备产品推广与影响力建设能力，能够通过内容运营建立个人品牌，拓展行业资源与商业机会。
+                    </p>
+                </div>
+
+                <!-- 能力标签 -->
+                <div class="pt-8 border-t border-white/5">
+                    <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">技术能力栈</h4>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-tag px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm text-gray-300 cursor-default">Agent Builder</span>
+                        <span class="skill-tag px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm text-gray-300 cursor-default">SFT/RAG</span>
+                        <span class="skill-tag px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm text-gray-300 cursor-default">上下文工程</span>
+                        <span class="skill-tag px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm text-gray-300 cursor-default">MCP协议</span>
+                        <span class="skill-tag px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm text-gray-300 cursor-default">ClawBot</span>
+                        <span class="skill-tag px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm text-gray-300 cursor-default">VibeCoding</span>
+                        <span class="skill-tag px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm text-gray-300 cursor-default">数据治理</span>
+                        <span class="skill-tag px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm text-gray-300 cursor-default">指标体系</span>
+                        <span class="skill-tag px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm text-gray-300 cursor-default">模型评测</span>
+                        <span class="skill-tag px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm text-gray-300 cursor-default">184体系</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience - 修复时间轴 -->
+    <section id="experience" class="relative z-10 py-32 border-t border-white/5">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="mb-16 fade-in-up">
+                <h2 class="text-sm font-semibold tracking-wider uppercase mb-4" style="color: #32F08C;">Experience</h2>
+                <h3 class="text-4xl md:text-5xl font-bold tracking-tight text-gradient">工作经历</h3>
+            </div>
+
+            <div class="timeline-container timeline-line space-y-16">
+                <!-- 极氪智能 -->
+                <div class="relative timeline-item fade-in-up group">
+                    <div class="space-y-2">
+                        <div class="flex flex-col md:flex-row md:items-baseline justify-between gap-2">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl overflow-hidden bg-white/10 flex-shrink-0 flex items-center justify-center border border-white/10">
+                                    <img src="切图素材/极氪.png" alt="极氪" class="w-full h-full object-contain p-1">
+                                </div>
+                                <h4 class="text-2xl md:text-3xl font-bold text-white transition-colors">浙江极氪智能科技有限公司</h4>
+                            </div>
+                            <span class="text-sm text-gray-500 font-mono">2025.1 - 至今</span>
+                        </div>
+                        <p class="text-lg font-medium" style="color: #32F08C;">AI产品经理 · IDD智能部</p>
+                        <p class="text-white/80 leading-relaxed pt-4 max-w-3xl">
+                            深度参与极氪AI to B战略落地蓝图（184体系：1个角色+8个步骤+4个保障）共建，主导智能座舱AI Coding及广宣审核数字员工平台项目，推动AI技术在车端场景的全面落地应用。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 阿里巴巴生态 -->
+                <div class="relative timeline-item fade-in-up group" style="animation-delay: 0.1s;">
+                    <div class="space-y-2">
+                        <div class="flex flex-col md:flex-row md:items-baseline justify-between gap-2">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl overflow-hidden bg-white/10 flex-shrink-0 flex items-center justify-center border border-white/10">
+                                    <img src="切图素材/阿里巴巴.jpg" alt="阿里巴巴" class="w-full h-full object-contain p-1">
+                                </div>
+                                <h4 class="text-2xl md:text-3xl font-bold text-white transition-colors">阿里巴巴生态用工-亿达信息科技</h4>
+                            </div>
+                            <span class="text-sm text-gray-500 font-mono">2024.9 - 2025.1</span>
+                        </div>
+                        <p class="text-lg font-medium" style="color: #32F08C;">AI产品经理</p>
+                        <p class="text-white/80 leading-relaxed pt-4 max-w-3xl">
+                            负责ideaTALK智能体构建平台及夸克万相识图SFT项目，主导智能体端到端搭建与多模态大模型训练策略制定，沉淀AI应用开发最佳实践。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 华住集团 -->
+                <div class="relative timeline-item fade-in-up group" style="animation-delay: 0.2s;">
+                    <div class="space-y-2">
+                        <div class="flex flex-col md:flex-row md:items-baseline justify-between gap-2">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl overflow-hidden bg-white/10 flex-shrink-0 flex items-center justify-center border border-white/10">
+                                    <img src="切图素材/华住.jpg" alt="华住" class="w-full h-full object-contain p-1">
+                                </div>
+                                <h4 class="text-2xl md:text-3xl font-bold text-white transition-colors">华住集团上海季住有限公司</h4>
+                            </div>
+                            <span class="text-sm text-gray-500 font-mono">2022.10 - 2024.9</span>
+                        </div>
+                        <p class="text-lg font-medium" style="color: #32F08C;">AI产品经理</p>
+                        <p class="text-white/80 leading-relaxed pt-4 max-w-3xl">
+                            负责酒店智能化产品规划与落地，推动AI技术在酒店场景的创新应用，提升用户入住体验与运营效率。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 百安居 -->
+                <div class="relative timeline-item fade-in-up group" style="animation-delay: 0.3s;">
+                    <div class="space-y-2">
+                        <div class="flex flex-col md:flex-row md:items-baseline justify-between gap-2">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl overflow-hidden bg-white/10 flex-shrink-0 flex items-center justify-center border border-white/10">
+                                    <img src="切图素材/百安居.jpg" alt="百安居" class="w-full h-full object-contain p-1">
+                                </div>
+                                <h4 class="text-2xl md:text-3xl font-bold text-white transition-colors">百安居上海网络科技有限公司</h4>
+                            </div>
+                            <span class="text-sm text-gray-500 font-mono">2020.12 - 2022.10</span>
+                        </div>
+                        <p class="text-lg font-medium" style="color: #32F08C;">UX用户体验设计师</p>
+                        <p class="text-white/80 leading-relaxed pt-4 max-w-3xl">
+                            负责电商平台用户体验设计与优化，通过用户研究与数据分析驱动产品迭代，提升转化率与用户满意度。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 上海轩天置业 -->
+                <div class="relative timeline-item fade-in-up group" style="animation-delay: 0.4s;">
+                    <div class="space-y-2">
+                        <div class="flex flex-col md:flex-row md:items-baseline justify-between gap-2">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl overflow-hidden bg-white/10 flex-shrink-0 flex items-center justify-center border border-white/10">
+                                    <img src="切图素材/轩天.webp" alt="轩天" class="w-full h-full object-contain p-1">
+                                </div>
+                                <h4 class="text-2xl md:text-3xl font-bold text-white transition-colors">上海轩天置业有限公司</h4>
+                            </div>
+                            <span class="text-sm text-gray-500 font-mono">2016.9 - 2020.12</span>
+                        </div>
+                        <p class="text-lg font-medium" style="color: #32F08C;">UX用户体验设计师</p>
+                        <p class="text-white/80 leading-relaxed pt-4 max-w-3xl">
+                            负责房产交易平台用户体验设计，从0到1搭建产品设计体系，积累丰富的B端与C端产品设计经验。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects" class="relative z-10 py-32 border-t border-white/5">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="mb-16 fade-in-up">
+                <h2 class="text-sm font-semibold tracking-wider uppercase mb-4" style="color: #32F08C;">Projects</h2>
+                <h3 class="text-4xl md:text-5xl font-bold tracking-tight text-gradient mb-4">精选项目</h3>
+                <p class="text-gray-400 text-lg">深度参与的产品实践与技术创新</p>
+            </div>
+
+            <div class="space-y-8">
+                <!-- 项目1 -->
+                <div class="glass-card rounded-3xl p-8 glass-card-hover transition-all duration-500 fade-in-up">
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="md:w-1/3">
+                            <div class="h-48 md:h-full rounded-2xl border flex items-center justify-center text-5xl" style="background: linear-gradient(135deg, rgba(50, 240, 140, 0.1), rgba(34, 211, 238, 0.1)); border-color: rgba(50, 240, 140, 0.2);">
+                                🚗
+                            </div>
+                        </div>
+                        <div class="md:w-2/3 space-y-4">
+                            <div class="flex items-center gap-3">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border" style="background: rgba(50, 240, 140, 0.1); color: #32F08C; border-color: rgba(50, 240, 140, 0.2);">极氪智能</span>
+                                <span class="text-xs text-gray-500">智能座舱 AI Coding</span>
+                            </div>
+                            <h4 class="text-2xl font-bold text-white">场景工坊-智能座舱 AI Coding</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed">
+                                现有车机桌面受限于固定卡片位架构，难以满足千人千面的个性化需求。本项目通过AI Coding技术，建立语音需求直达桌面卡片的生成通道，让用户能够以自然语言实时构建专属的个性化交互组件。
+                            </p>
+                            <ul class="project-detail-list text-sm space-y-2">
+                                <li>构建车端应用+开发者平台+运营后台三端产品体系</li>
+                                <li>设计Agent全链路："语音输入→多轮澄清→Summary确认→PRD生成→代码编译→卡片预览→添加桌面"</li>
+                                <li>上下文工程优化：搭建Prompt模板库，通过Few-shot+CoT优化生成质量，卡片可用率从62%提升至89%</li>
+                                <li>构建2000+条标注数据集，设计「功能完整度:视觉还原度x交互可用性」三维评测体系，迭代8个版本</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 项目2 -->
+                <div class="glass-card rounded-3xl p-8 glass-card-hover transition-all duration-500 fade-in-up" style="animation-delay: 0.1s;">
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="md:w-1/3">
+                            <div class="h-48 md:h-full rounded-2xl border flex items-center justify-center text-5xl" style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(139, 92, 246, 0.1)); border-color: rgba(168, 85, 247, 0.2);">
+                                ⚖️
+                            </div>
+                        </div>
+                        <div class="md:w-2/3 space-y-4">
+                            <div class="flex items-center gap-3">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border" style="background: rgba(168, 85, 247, 0.1); color: #a855f7; border-color: rgba(168, 85, 247, 0.2);">极氪智能</span>
+                                <span class="text-xs text-gray-500">Agent数字员工平台</span>
+                            </div>
+                            <h4 class="text-2xl font-bold text-white">广宣审核助理小智-Agent数字员工</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed">
+                                吉利集团每年产生5万+广告素材，因客户投诉举报索赔高达500万元以上。人工审核平均耗时30min/张，通过AI数字员工实现自动化审核，大幅降低合规风险与人力成本。
+                            </p>
+                            <ul class="project-detail-list text-sm space-y-2">
+                                <li>模型策略：设计「敏感词+向量法规召回+图片零样本提示词」三级方案；共建1200条负样本，定义18类风险标签</li>
+                                <li>数据指标：搭建7项核心指标（首响P95、误报率、漏报率、GPU成本等），打通Dify Webhook→ClickHouse→Grafana实现T+1自动看板</li>
+                                <li>用户运营：设计「秒过红包+连续勋章+团队排行榜」功能，电话审核量↓80%，插件次日留存45%</li>
+                                <li>28天迭代6版本，误报率由7%→3%，漏报率0.8%，投诉0单</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 项目3 -->
+                <div class="glass-card rounded-3xl p-8 glass-card-hover transition-all duration-500 fade-in-up" style="animation-delay: 0.2s;">
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="md:w-1/3">
+                            <div class="h-48 md:h-full rounded-2xl border flex items-center justify-center text-5xl" style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(234, 88, 12, 0.1)); border-color: rgba(249, 115, 22, 0.2);">
+                                💡
+                            </div>
+                        </div>
+                        <div class="md:w-2/3 space-y-4">
+                            <div class="flex items-center gap-3">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border" style="background: rgba(249, 115, 22, 0.1); color: #f97316; border-color: rgba(249, 115, 22, 0.2);">阿里巴巴</span>
+                                <span class="text-xs text-gray-500">智能体构建平台</span>
+                            </div>
+                            <h4 class="text-2xl font-bold text-white">ideaTALK-智能体（Agent builder）</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed">
+                                阿里巴巴自研的一站式AI应用构建与服务平台，通过低代码AI开发引擎与全链路智能工具矩阵，赋能员工快速将AI技术融入业务流程。
+                            </p>
+                            <ul class="project-detail-list text-sm space-y-2">
+                                <li>主导智能体端到端搭建，基于用户需求与业务场景完成智能体架构设计，整合多种工具链实现功能拓展</li>
+                                <li>构建多轮对话逻辑，设计覆盖任务完成率、响应准确性、工具调用成功率等核心指标的Agent评测框架</li>
+                                <li>统筹数据运营全链路，通过对话质量分析挖掘产品优化点，运用数据挖掘精准定位异常case</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 项目4 -->
+                <div class="glass-card rounded-3xl p-8 glass-card-hover transition-all duration-500 fade-in-up" style="animation-delay: 0.3s;">
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="md:w-1/3">
+                            <div class="h-48 md:h-full rounded-2xl border flex items-center justify-center text-5xl" style="background: linear-gradient(135deg, rgba(34, 211, 238, 0.1), rgba(6, 182, 212, 0.1)); border-color: rgba(34, 211, 238, 0.2);">
+                                🖼️
+                            </div>
+                        </div>
+                        <div class="md:w-2/3 space-y-4">
+                            <div class="flex items-center gap-3">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border" style="background: rgba(34, 211, 238, 0.1); color: #22d3ee; border-color: rgba(34, 211, 238, 0.2);">阿里巴巴</span>
+                                <span class="text-xs text-gray-500">多模态大模型训练</span>
+                            </div>
+                            <h4 class="text-2xl font-bold text-white">夸克万相识图 SFT（多模态大模型训练策略）</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed">
+                                提升模型生成图像的多样性，减少潜在的种族偏见；提升智能生图模型的生成质量与内容匹配度。
+                            </p>
+                            <ul class="project-detail-list text-sm space-y-2">
+                                <li>数据收集：制定站点数据抓取策略，构建多样性维度覆盖年龄段、性别、姿态动作、表情、服饰、发型等</li>
+                                <li>数据标注：构建三级数据分类体系，设计标准化标注框架，通过"标注-语义解析-Prompt优化"闭环提升数据结构化质量</li>
+                                <li>模型评测：配套设计0-4分精细化评分标准，构建培训体系培养评测人员审美，建立标准化的图像质量评估框架</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="relative z-10 py-32 border-t border-white/5">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <div class="glass-card rounded-3xl p-12 md:p-16 fade-in-up">
+                <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6" style="background: rgba(50, 240, 140, 0.2);">
+                    <i data-lucide="sparkles" class="w-8 h-8" style="color: #32F08C;"></i>
+                </div>
+                <h3 class="text-4xl md:text-5xl font-bold text-gradient mb-4">感谢您的观看</h3>
+                <p class="text-gray-400 text-lg mb-8 max-w-md mx-auto">
+                    如果你有AI产品相关的想法或机会，欢迎随时联系我。
+                </p>
+                
+                <div class="grid md:grid-cols-3 gap-4 mb-8 text-left">
+                    <div class="glass-card rounded-2xl p-4 border border-white/10">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: rgba(50, 240, 140, 0.2);">
+                                <i data-lucide="phone" class="w-4 h-4" style="color: #32F08C;"></i>
+                            </div>
+                            <span class="text-xs text-gray-500 uppercase">电话</span>
+                        </div>
+                        <p class="text-white font-mono text-sm">17602140382</p>
+                    </div>
+                    
+                    <div class="glass-card rounded-2xl p-4 border border-white/10">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: rgba(50, 240, 140, 0.2);">
+                                <i data-lucide="mail" class="w-4 h-4" style="color: #32F08C;"></i>
+                            </div>
+                            <span class="text-xs text-gray-500 uppercase">邮箱</span>
+                        </div>
+                        <p class="text-white font-mono text-sm break-all">512560971@qq.com</p>
+                    </div>
+                    
+                    <div class="glass-card rounded-2xl p-4 border border-white/10">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: rgba(50, 240, 140, 0.2);">
+                                <i data-lucide="message-circle" class="w-4 h-4" style="color: #32F08C;"></i>
+                            </div>
+                            <span class="text-xs text-gray-500 uppercase">微信</span>
+                        </div>
+                        <p class="text-white font-mono text-sm">March00912</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="mailto:512560971@qq.com" class="btn-glow px-8 py-4 rounded-full bg-white text-black font-semibold hover:scale-105 transition-transform flex items-center justify-center gap-2">
+                        <i data-lucide="mail" class="w-5 h-5"></i>
+                        发送邮件
+                    </a>
+                    <a href="javascript:void(0)" onclick="copyWechat()" class="px-8 py-4 rounded-full bg-white/5 text-white font-semibold border border-white/10 hover:bg-white/10 transition-all flex items-center justify-center gap-2 cursor-pointer">
+                        <i data-lucide="copy" class="w-5 h-5"></i>
+                        复制微信号
+                    </a>
+                </div>
+
+                <div class="flex justify-center gap-4 mt-12">
+                    <a href="javascript:void(0)" onclick="showQRCode('抖音', '切图素材/抖音二维码.JPG')" class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:bg-white/10 hover:text-white transition-all cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg>
+                    </a>
+                    <a href="javascript:void(0)" onclick="showQRCode('视频号', '切图素材/视频号二维码.JPG')" class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:bg-white/10 hover:text-white transition-all cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+                    </a>
+                    <a href="javascript:void(0)" onclick="showQRCode('公众号', '切图素材/公众号二维码.JPG')" class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:bg-white/10 hover:text-white transition-all cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    </a>
+                </div>
+            </div>
+            
+            <p class="text-gray-600 text-sm mt-8">
+                © 2026 马驰. Built with passion & caffeine.
+            </p>
+        </div>
+    </section>
+
+    <script>
+        lucide.createIcons();
+
+        // 复制微信号
+        function copyWechat() {
+            const wechatId = 'March00912';
+            navigator.clipboard.writeText(wechatId).then(() => {
+                showToast('微信号已复制: ' + wechatId);
+            }).catch(() => {
+                const textArea = document.createElement('textarea');
+                textArea.value = wechatId;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('微信号已复制: ' + wechatId);
+            });
+        }
+
+        // 显示二维码弹窗
+        function showQRCode(title, imgSrc) {
+            const existingModal = document.getElementById('qrcode-modal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+
+            const modal = document.createElement('div');
+            modal.id = 'qrcode-modal';
+            modal.className = 'fixed inset-0 z-[100] flex items-center justify-center';
+            modal.innerHTML = `
+                <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeQRCodeModal()"></div>
+                <div class="relative glass-card rounded-3xl p-8 max-w-sm mx-4 transform transition-all duration-300 scale-95 opacity-0" id="qrcode-content" style="background: rgba(30, 30, 30, 0.9); border: 1px solid rgba(255, 255, 255, 0.1);">
+                    <button onclick="closeQRCodeModal()" class="absolute -top-3 -right-3 w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                    <h4 class="text-2xl font-bold text-white text-center mb-6">${title}</h4>
+                    <div class="w-56 h-56 mx-auto rounded-2xl overflow-hidden border-2 border-white/10">
+                        <img src="${imgSrc}" alt="${title}二维码" class="w-full h-full object-cover">
+                    </div>
+                    <p class="text-gray-400 text-center mt-4 text-sm">扫码关注</p>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            requestAnimationFrame(() => {
+                const content = document.getElementById('qrcode-content');
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            });
+        }
+
+        // 关闭二维码弹窗
+        function closeQRCodeModal() {
+            const modal = document.getElementById('qrcode-modal');
+            if (modal) {
+                const content = document.getElementById('qrcode-content');
+                content.classList.remove('scale-100', 'opacity-100');
+                content.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => modal.remove(), 300);
+            }
+        }
+
+        // 显示Toast提示
+        function showToast(message) {
+            const existingToast = document.getElementById('toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+
+            const toast = document.createElement('div');
+            toast.id = 'toast';
+            toast.className = 'fixed bottom-8 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-full text-white font-medium z-[101] transition-all duration-300';
+            toast.style.cssText = 'background: rgba(50, 240, 140, 0.9); backdrop-filter: blur(10px);';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translate(-50%, 20px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+
+        // 鼠标跟随光效
+        const cursorGlow = document.getElementById('cursor-glow');
+        let mouseX = 0, mouseY = 0;
+        let glowX = 0, glowY = 0;
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        
+        function animateCursor() {
+            glowX += (mouseX - glowX) * 0.1;
+            glowY += (mouseY - glowY) * 0.1;
+            cursorGlow.style.left = glowX + 'px';
+            cursorGlow.style.top = glowY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in-up').forEach(el => {
+            observer.observe(el);
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // 粒子网络动画背景
+        (function() {
+            const canvas = document.getElementById('particles-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let mouse = { x: null, y: null, radius: 150 };
+            
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+            
+            window.addEventListener('mousemove', function(e) {
+                mouse.x = e.x;
+                mouse.y = e.y;
+            });
+            
+            // 点击涟漪效果
+            let ripples = [];
+            canvas.addEventListener('click', function(e) {
+                ripples.push({
+                    x: e.x,
+                    y: e.y,
+                    radius: 0,
+                    maxRadius: 150,
+                    opacity: 1
+                });
+            });
+            
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 2 + 1;
+                    this.baseX = this.x;
+                    this.baseY = this.y;
+                    this.density = (Math.random() * 30) + 1;
+                    this.speedX = (Math.random() - 0.5) * 0.5;
+                    this.speedY = (Math.random() - 0.5) * 0.5;
+                }
+                
+                draw() {
+                    ctx.fillStyle = 'rgba(50, 240, 140, 0.8)';
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+                
+                update() {
+                    // 鼠标交互
+                    if (mouse.x != null && mouse.y != null) {
+                        let dx = mouse.x - this.x;
+                        let dy = mouse.y - this.y;
+                        let distance = Math.sqrt(dx * dx + dy * dy);
+                        let forceDirectionX = dx / distance;
+                        let forceDirectionY = dy / distance;
+                        let maxDistance = mouse.radius;
+                        let force = (maxDistance - distance) / maxDistance;
+                        let directionX = forceDirectionX * force * this.density;
+                        let directionY = forceDirectionY * force * this.density;
+                        
+                        if (distance < mouse.radius) {
+                            this.x -= directionX;
+                            this.y -= directionY;
+                        }
+                    }
+                    
+                    // 缓慢漂浮
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    
+                    // 边界检测
+                    if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+                }
+            }
+            
+            function init() {
+                particles = [];
+                let numberOfParticles = (canvas.width * canvas.height) / 9000;
+                for (let i = 0; i < numberOfParticles; i++) {
+                    particles.push(new Particle());
+                }
+            }
+            init();
+            window.addEventListener('resize', init);
+            
+            function connectParticles() {
+                for (let a = 0; a < particles.length; a++) {
+                    for (let b = a; b < particles.length; b++) {
+                        let dx = particles[a].x - particles[b].x;
+                        let dy = particles[a].y - particles[b].y;
+                        let distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 120) {
+                            let opacity = 1 - (distance / 120);
+                            ctx.strokeStyle = 'rgba(50, 240, 140, ' + opacity * 0.3 + ')';
+                            ctx.lineWidth = 1;
+                            ctx.beginPath();
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(particles[b].x, particles[b].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // 绘制涟漪效果
+                for (let i = ripples.length - 1; i >= 0; i--) {
+                    let r = ripples[i];
+                    r.radius += 3;
+                    r.opacity -= 0.02;
+                    
+                    if (r.opacity <= 0) {
+                        ripples.splice(i, 1);
+                        continue;
+                    }
+                    
+                    ctx.beginPath();
+                    ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+                    ctx.strokeStyle = 'rgba(50, 240, 140, ' + r.opacity * 0.5 + ')';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+                
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+                }
+                connectParticles();
+                requestAnimationFrame(animate);
+            }
+            animate();
+        })();
+    </script>
+</body>
+</html>
